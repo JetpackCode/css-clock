@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Clock</title>
+    </head>
+    <style>
+        body {
+            margin: 0;
+        }
+ 
+        .container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+        }
+  
+        .background {
+            min-width: calc(100vw + 100vh);
+            min-height: calc(100vw + 100vh);
+            background: linear-gradient(blue, #ccc);
+            background: conic-gradient(orange 0%, blue 2%, #ccc 98%, orange 100%);
+            animation: rotate 12s linear infinite;
+        }
+ 
+        .tick {
+            position: absolute;
+            background-color: white;
+        }
+ 
+        @keyframes rotate {
+            from {transform: rotate(0deg)}
+            to {transform: rotate(360deg)}
+        }
+ 
+        #hour {
+            position: absolute;
+            min-height: 22vmin;
+            min-width: 1.1vmin;
+            background-color: white;
+            margin-bottom: 22vmin;
+            transform-origin: 0.55vmin 22vmin;
+            animation: rotate 43200s linear infinite;
+        }
+ 
+        #minute {
+            position: absolute;
+            min-height: 29vmin;
+            min-width: 0.8vmin;
+            background-color: white;
+            margin-bottom: 29vmin;
+            transform-origin: 0.4vmin 29vmin;
+            animation: rotate 3600s steps(60) infinite;
+        }
+ 
+        #second {
+            position: absolute;
+            min-height: 35vmin;
+            min-width: 0.5vmin;
+            background-color: orange;
+            margin-bottom: 35vmin;
+            transform-origin: 0.25vmin 35vmin;
+            animation: rotate 60s steps(60) infinite;
+        }
+ 
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            min-height: 2vmin;
+            min-width: 2vmin;
+            background-color: white;
+        }
+    </style>
+    <body>
+        <div class="container">
+            <div class="background"></div>
+            <script>
+                var width = 0.5;
+                var offset = 80;
+                for(var i = 0; i < 60; i++) {
+                    if(i < 25 && i % 5 > 0) continue;
+                    var tick = document.createElement("div");
+                    tick.classList.add("tick");
+                    var height = i % 5 == 0 ? 10 : 3.3;
+                    tick.style.backgroundColor = i % 5 == 0 ? "orange" : "white";
+                    tick.style.height = height + "vmin";
+                    tick.style.width = width + "vmin";
+                    tick.style.marginBottom = (offset - height) + "vmin";
+                    tick.style.transform = `rotate(${i*6}deg)`;
+                    tick.style.transformOrigin = `${width/2}vmin ${offset/2}vmin`;
+                    document.currentScript.parentNode.appendChild(tick);
+                }
+            </script>
+            <div id="hour"></div>
+            <div id="minute"></div>
+            <div id="second"></div>
+            <script>
+                var date = new Date();
+                var time = date.getHours() * 3600 +
+                           date.getMinutes() * 60 +
+                           date.getSeconds() +
+                           date.getMilliseconds() / 1000;
+                var delay = "-" + time + "s";
+                document.getElementById("hour").style.animationDelay = delay;
+                document.getElementById("minute").style.animationDelay = delay;
+                document.getElementById("second").style.animationDelay = delay;
+            </script>
+            <div class="circle"></div>
+        </div>
+    </body>
+</html>
